@@ -1,3 +1,6 @@
 .idea/
 venv/
 Trin/data/
+Trin/commands/__pycache__/
+Trin/noncommand/__pycache__/
+Trin/utils/__pycache__/
