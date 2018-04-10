@@ -1,12 +1,12 @@
 from commands.Start import start
 from commands.dolarBTC import dolarBTC
 from commands.help import help
+from commands.carlos import carlos
 from noncommand.error import error
 from noncommand.InlineQuery import inlinequery
 from utils.TokenReader import readToken
 from telegram.ext import Updater, CommandHandler, InlineQueryHandler
 import logging
-
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -18,6 +18,7 @@ dispatcher = updater.dispatcher
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('dolarBTC', dolarBTC, pass_args=True))
 dispatcher.add_handler(CommandHandler('help', help))
+dispatcher.add_handler(CommandHandler('carlos', carlos))
 # # # # # # # # # NON-COMMAND HANDLER # # # # # # # # #
 dispatcher.add_handler(InlineQueryHandler(inlinequery))
 dispatcher.add_error_handler(error)
