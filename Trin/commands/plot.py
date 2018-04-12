@@ -6,7 +6,7 @@ import matplotlib.dates as mdates
 from utils import SaveLoadObj
 from telegram import ParseMode
 import datetime
-from VET import datetimeVen
+from utils.VET import datetimeVen
 from telegram import ParseMode
 
 # Path of data to plot
