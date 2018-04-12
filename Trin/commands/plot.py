@@ -72,8 +72,6 @@ def plot(bot, update, args):
         wrongInput(bot, update)
         return
 
-    # Autoscale axis
-    ax.autoscale_view()
     # Enable Grid
     plt.grid(True, which="both")
     # Y-axis log scale
