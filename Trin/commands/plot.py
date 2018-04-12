@@ -8,9 +8,8 @@ from telegram import ParseMode
 import datetime
 from utils.VET import datetimeVen
 from telegram import ParseMode
-from PIL import Image
-import PIL.ImageOps
 import random
+import png
 
 # Path of data to plot
 path = ""
@@ -29,9 +28,8 @@ daysFmt = mdates.DateFormatter('%a')
 
 def plot(bot, update, args):
     # if /plot has <arg1> and <arg2>
-    if len(args) != 2:
-        foo = ['day', 'week', 'month', 'year', 'all']
-        plot(bot, update, ["dolartoday", random.choice(foo)])
+    if len(args) != 2 or args[0] != 'dolartoday' or args[1] not in ['day', 'week', 'month', 'year', 'all']:
+        return
 
 
     fig, ax = plt.subplots()
@@ -102,23 +100,9 @@ def plot(bot, update, args):
     #Ensure that the fig is closed
     plt.close(fig)
     #Inverting the photo
-    image = Image.open('data/plot.png')
-    if image.mode == 'RGBA':
-        r, g, b, a = image.split()
-        rgb_image = Image.merge('RGB', (r, g, b))
-
-        inverted_image = PIL.ImageOps.invert(rgb_image)
-
-        r2, g2, b2 = inverted_image.split()
-
-        inverted_image = Image.merge('RGBA', (r2, g2, b2, a))
-
-
-    else:
-        inverted_image = PIL.ImageOps.invert(image)
     #Sending it
     caption = "*BETA FEATURE: still in progress*\n"
-    bot.send_photo(chat_id=update.message.chat_id, photo=inverted_image, caption=caption, parse_mode=ParseMode.MARKDOWN, reply_to_message_id=update.message.message_id)
+    bot.send_photo(chat_id=update.message.chat_id, photo=open('data/plot.png', 'rb'), caption=caption, parse_mode=ParseMode.MARKDOWN, reply_to_message_id=update.message.message_id)
 
     # If len args is not 2 ej /plot or /plot dolar or /plot very long sentence
 def wrongInput(bot, update):
