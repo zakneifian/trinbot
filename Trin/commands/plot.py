@@ -101,7 +101,7 @@ def plot(bot, update, args):
     #Ensure that the fig is closed
     plt.close(fig)
     caption = "*BETA FEATURE: still in progress*\n"
-    bot.send_photo(chat_id=update.message.chat_id, photo='data/plot.png', caption=caption, parse_mode=ParseMode.MARKDOWN, reply_to_message_id=update.message.message_id)
+    bot.send_photo(chat_id=update.message.chat_id, photo=open('data/plot.png', 'rb'), caption=caption, parse_mode=ParseMode.MARKDOWN, reply_to_message_id=update.message.message_id)
 
     # If len args is not 2 ej /plot or /plot dolar or /plot very long sentence
 def wrongInput(bot, update):
