@@ -103,7 +103,20 @@ def plot(bot, update, args):
     plt.close(fig)
     #Inverting the photo
     image = Image.open('data/plot.png')
-    inverted_image = PIL.ImageOps.invert(image)
+    if image.mode == 'RGBA':
+        r, g, b, a = image.split()
+        rgb_image = Image.merge('RGB', (r, g, b))
+
+        inverted_image = PIL.ImageOps.invert(rgb_image)
+
+        r2, g2, b2 = inverted_image.split()
+
+        inverted_image = Image.merge('RGBA', (r2, g2, b2, a))
+
+
+    else:
+        inverted_image = PIL.ImageOps.invert(image)
+    #Sending it
     caption = "*BETA FEATURE: still in progress*\n"
     bot.send_photo(chat_id=update.message.chat_id, photo=inverted_image, caption=caption, parse_mode=ParseMode.MARKDOWN, reply_to_message_id=update.message.message_id)
 
