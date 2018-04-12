@@ -8,8 +8,6 @@ from telegram import ParseMode
 import datetime
 from utils.VET import datetimeVen
 from telegram import ParseMode
-import random
-import png
 
 # Path of data to plot
 path = ""
