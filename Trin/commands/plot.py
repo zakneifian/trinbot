@@ -8,6 +8,9 @@ from telegram import ParseMode
 import datetime
 from utils.VET import datetimeVen
 from telegram import ParseMode
+from PIL import Image
+import PIL.ImageOps
+import random
 
 # Path of data to plot
 path = ""
@@ -27,8 +30,8 @@ daysFmt = mdates.DateFormatter('%a')
 def plot(bot, update, args):
     # if /plot has <arg1> and <arg2>
     if len(args) != 2:
-        wrongInput(bot, update)
-        return
+        foo = ['day', 'week', 'month', 'year', 'all']
+        plot(bot, update, ["dolartoday", random.choice(foo)])
 
 
     fig, ax = plt.subplots()
@@ -98,14 +101,17 @@ def plot(bot, update, args):
     plt.savefig("data/plot.png", dpi=300, orientation='landscape', bbox_inches='tight', pad_inches=0.01)
     #Ensure that the fig is closed
     plt.close(fig)
+    #Inverting the photo
+    image = Image.open('data/plot.png')
+    inverted_image = PIL.ImageOps.invert(image)
     caption = "*BETA FEATURE: still in progress*\n"
-    bot.send_photo(chat_id=update.message.chat_id, photo=open('data/plot.png', 'rb'), caption=caption, parse_mode=ParseMode.MARKDOWN, reply_to_message_id=update.message.message_id)
+    bot.send_photo(chat_id=update.message.chat_id, photo=inverted_image, caption=caption, parse_mode=ParseMode.MARKDOWN, reply_to_message_id=update.message.message_id)
 
     # If len args is not 2 ej /plot or /plot dolar or /plot very long sentence
 def wrongInput(bot, update):
     toPrint = "*Correct usage of /plot@trinbot is as follows:*\n\n" \
               "`/plot@trinbot <arg1> <arg2>` where `<arg1>` can be either `dolartoday` or `localbtc` and `<arg2>`" \
-              "can be: `day`, `week`, `month`, `year` or `all`"
+              " can be: `day`, `week`, `month`, `year` or `all`"
     bot.send_message(chat_id=update.message.chat_id, text=toPrint, parse_mode=ParseMode.MARKDOWN,
                      reply_to_message_id=update.message.message_id)
 
