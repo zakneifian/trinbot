@@ -28,7 +28,7 @@ dispatcher.add_handler(CommandHandler('plot', plot, pass_args=True))
 dispatcher.add_handler(InlineQueryHandler(inlinequery))
 dispatcher.add_error_handler(error)
 # # # # # # # # # # JOBS FOR THE BOT # # # # # # # # # #
-jobQ.run_repeating(setDollar, 300, first=0)
+jobQ.run_repeating(setDollar, 600, first=0)
 jobQ.run_daily(updateDT, datetime.time(hour=19, minute=0, second=0))
 # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Start the bot
