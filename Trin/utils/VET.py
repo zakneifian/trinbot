@@ -4,8 +4,8 @@ import time
 
 # Only available in UNIX
 
-# os.environ['TZ'] = 'America/Caracas'
-# time.tzset()
+os.environ['TZ'] = 'America/Caracas'
+time.tzset()
 
 
 
