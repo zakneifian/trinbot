@@ -39,7 +39,7 @@ dispatcher.add_handler(InlineQueryHandler(inlinequery))
 dispatcher.add_error_handler(error)
 # # # # # # # # # # JOBS FOR THE BOT # # # # # # # # # #
 jobQ.run_repeating(setDollar, 600, first=0)
-jobQ.run_daily(updateDT, datetime.time(hour=19, minute=0, second=0))
+jobQ.run_daily(updateDT, datetime.time(hour=0, minute=0, second=0))
 jobQ.run_daily(updateLBTC, datetime.time(hour=0, minute=0, second=0), context="24")
 jobQ.run_repeating(updateLBTC, 3600, first=datetime.time(hour=0, minute=0, second=0), context="1")
 # # # # # # # # # # # # # # # # # # # # # # # # # # # #

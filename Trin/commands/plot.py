@@ -78,7 +78,6 @@ def plot(bot, update, args):
     plt.ylabel("VEF/USD")
     # Value limits of axis x
     ax.set_xlim(datemin, datemax)
-    ax.format_xdata = mdates.DateFormatter('%Y/%m/%d')
     # Loading DolarToday data to plot
     toPlotBTC = SaveLoadObj.load_obj("LBTClist")
     toPlotDT = SaveLoadObj.load_obj("DTlist")
@@ -110,13 +109,17 @@ def plot(bot, update, args):
         minV = int(str(dfBTC["LocalBitcoins"].min())[0]) * 10 ** math.floor(math.log10(dfBTC["LocalBitcoins"].min()))
         maxV = math.ceil(dfBTC["LocalBitcoins"].max() % 10) * 10 ** math.floor(math.log10(dfBTC["LocalBitcoins"].max()))
         plt.ylim(minV, maxV)
-    # Reformatting y axis value ticks
-    # ax.ticklabel_format(style='plain', axis='y')
+
     # Plotting
     dfBTC.plot(x='date', y='LocalBitcoins', ax=ax, color="orange")
     dfDT.plot(x='date', y='DolarToday', ax=ax, color="yellow")
     #Format and tilt x axis dates
     fig.autofmt_xdate(which='both', rotation=50)
+    # Reformatting y axis value ticks
+    #for axis in [ax.yaxis]:
+    #    axis.set_major_formatter(ScalarFormatter())
+    #    axis.set_minor_formatter(ScalarFormatter())
+    #ax.ticklabel_format(useOffset=False, style='plain', axis='y')
     #Lower major formatter to not collide with the minor one
     for tick in ax.xaxis.get_major_ticks():
         tick.tick1line.set_markersize(2)
