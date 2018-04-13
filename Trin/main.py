@@ -20,6 +20,7 @@ from noncommand.InlineQuery import inlinequery
 from noncommand.error import error
 # utils
 from utils.TokenReader import readToken
+from utils.VET import timeVen
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -41,7 +42,7 @@ dispatcher.add_error_handler(error)
 jobQ.run_repeating(setDollar, 600, first=0)
 jobQ.run_daily(updateDT, datetime.time(hour=0, minute=0, second=0))
 jobQ.run_daily(updateLBTC, datetime.time(hour=0, minute=0, second=0), context="24")
-jobQ.run_repeating(updateLBTC, 3600, first=datetime.time(hour=0, minute=0, second=0), context="1")
+jobQ.run_repeating(updateLBTC, 3600, first=(datetime.time(hour=timeVen().hour, minute=0, second=0) + datetime.timedelta(hours=1)), context="1")
 # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Start the bot
 updater.start_polling()
