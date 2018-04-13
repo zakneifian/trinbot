@@ -1,9 +1,9 @@
-import requests
 from utils.VET import datetimeVen
-from utils import SaveLoadObj
+from utils.VET import datetimeVen
+from utils.getDT import getDT
+
 
 def updateDT(bot, job):
     DatePrice = SaveLoadObj.load_obj("DTlist")
-    request = requests.get('https://s3.amazonaws.com/dolartoday/data.json').json()
-    DatePrice.append({"date": datetimeVen(), "DolarToday": request["USD"]["dolartoday"]})
+    DatePrice.append({"date": datetimeVen(), "DolarToday": getDT()})
     SaveLoadObj.save_obj(DatePrice, "DTlist")

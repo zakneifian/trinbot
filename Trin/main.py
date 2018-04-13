@@ -1,16 +1,26 @@
+# commands
+import datetime
+# python libs
+import logging
+
+# telegram python api wrapper
+from telegram.ext import Updater, CommandHandler, InlineQueryHandler
+
 from commands.Start import start
+from commands.carlos import carlos
 from commands.dolarBTC import dolarBTC
 from commands.help import help
-from commands.carlos import carlos
 from commands.plot import plot
-from noncommand.error import error
-from noncommand.InlineQuery import inlinequery
+# jobs
 from jobs.CalcDollar import setDollar
 from jobs.updateDT import updateDT
+from jobs.updateLBTC import updateLBTC
+from noncommand.InlineQuery import inlinequery
+# non-commands
+from noncommand.error import error
+# utils
 from utils.TokenReader import readToken
-from telegram.ext import Updater, CommandHandler, InlineQueryHandler
-import logging
-import datetime
+
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -30,6 +40,8 @@ dispatcher.add_error_handler(error)
 # # # # # # # # # # JOBS FOR THE BOT # # # # # # # # # #
 jobQ.run_repeating(setDollar, 600, first=0)
 jobQ.run_daily(updateDT, datetime.time(hour=19, minute=0, second=0))
+jobQ.run_daily(updateLBTC, datetime.time(hour=0, minute=0, second=0), context="24")
+jobQ.run_repeating(updateLBTC, 3600, first=datetime.time(hour=0, minute=0, second=0), context="1")
 # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Start the bot
 updater.start_polling()

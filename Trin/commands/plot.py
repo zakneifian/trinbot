@@ -1,10 +1,11 @@
-from pandas import DataFrame
+# TODO FIND THE MIN/MAX OF LBTC AND LOOK WHICH IS MIN OR MAX BETWEEN DT AND LBTC
 import matplotlib
+from pandas import DataFrame
+
 matplotlib.use('AGG')
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from utils import SaveLoadObj
-from telegram import ParseMode
 import datetime
 from utils.VET import datetimeVen, horaVen
 from telegram import ParseMode
@@ -67,11 +68,8 @@ def plot(bot, update, args):
         ax.xaxis.set_major_locator(years)
         ax.xaxis.set_major_formatter(yearsFmt)
         ax.xaxis.set_minor_locator(months)
-    else:
-        wrongInput(bot, update)
-        return
 
-    # Enable Grid
+    # Enable Grid and lower opacity
     plt.grid(True, which="both", alpha=0.7)
     # Y-axis log scale
     plt.yscale('log')
@@ -82,29 +80,41 @@ def plot(bot, update, args):
     ax.set_xlim(datemin, datemax)
     ax.format_xdata = mdates.DateFormatter('%Y/%m/%d')
     # Loading DolarToday data to plot
-    toPlot = SaveLoadObj.load_obj("DTlist")
-    df = DataFrame(toPlot)
-    # Finding y lims
-    indexOfDatemin = df[df['date'] == datemin].index[0]
-    # indexOfDatemax = df[df['date'] == datemax].index[0]
-    indexOfDatemax = len(df) - 1
-    minV = -1
-    maxV = -1
-    vals = []
-    for i in range(indexOfDatemin, indexOfDatemax + 1):
-        vals.append(df.at[i, 'DolarToday'])
-    # EJ: int(str(410543.45)[0] is simply 4. That times 10^: math.log10(410543.45) is 5.something. Floor it and you have 5; 10^5.
-    # Therefore 4*10^5
-    minV = int(str(min(vals))[0])*10**math.floor(math.log10(min(vals)))
-    # EJ: 410543.45%10 is  4.1.... ceil it; 5. that times 10^: math.log10(410543.45) is 5.something. Floor it and you have 5; 10^5.
-    # Therefore 5*10^5
-    maxV = math.ceil(max(vals)%10)*10**math.floor(math.log10(max(vals)))
-    # Value limits of axis y
-    plt.ylim(minV, maxV)
-    #Reformatting y axis value ticks
-     #ax.ticklabel_format(style='plain', axis='y')
+    toPlotBTC = SaveLoadObj.load_obj("LBTClist")
+    toPlotDT = SaveLoadObj.load_obj("DTlist")
+    dfDT = DataFrame(toPlotDT)
+    dfBTC = DataFrame(toPlotBTC)
+    if args[0] != "day":
+        # Finding y lims
+        indexOfDatemin = dfDT[dfDT['date'] == datemin].index[0]
+        # indexOfDatemax = dfDT[dfDT['date'] == datemax].index[0]
+        indexOfDatemax = len(dfDT) - 1
+        minV = -1
+        maxV = -1
+        vals = []
+        for i in range(indexOfDatemin, indexOfDatemax + 1):
+            vals.append(dfDT.at[i, 'DolarToday'])
+        # EJ: int(str(410543.45)[0] is simply 4. That times 10^: math.log10(410543.45) is 5.something. Floor it and you have 5; 10^5.
+        # Therefore 4*10^5
+        # dt
+        minV = (int(str(min(vals))[0])) * 10 ** math.floor(math.log10(min(vals)))
+        # EJ: 410543.45%10 is  4.1.... ceil it; 5. that times 10^: math.log10(410543.45) is 5.something. Floor it and you have 5; 10^5.
+        # Therefore 5*10^5
+        # dt
+        maxV = (math.ceil(max(vals) % 10) + 1) * 10 ** math.floor(math.log10(max(vals)))
+        # Value limits of axis y
+        plt.ylim(minV, maxV)
+    elif args[0] == "day":  # hourly plot
+        LBTChourly = SaveLoadObj.load_obj("LBTChourly")
+        dfBTC = DataFrame(LBTChourly)
+        minV = int(str(dfBTC["LocalBitcoins"].min())[0]) * 10 ** math.floor(math.log10(dfBTC["LocalBitcoins"].min()))
+        maxV = math.ceil(dfBTC["LocalBitcoins"].max() % 10) * 10 ** math.floor(math.log10(dfBTC["LocalBitcoins"].max()))
+        plt.ylim(minV, maxV)
+    # Reformatting y axis value ticks
+    # ax.ticklabel_format(style='plain', axis='y')
     # Plotting
-    df.plot(x='date', y='DolarToday', ax=ax, color="yellow")
+    dfBTC.plot(x='date', y='LocalBitcoins', ax=ax, color="orange")
+    dfDT.plot(x='date', y='DolarToday', ax=ax, color="yellow")
     #Format and tilt x axis dates
     fig.autofmt_xdate(which='both', rotation=50)
     #Lower major formatter to not collide with the minor one
@@ -120,12 +130,3 @@ def plot(bot, update, args):
     #Sending it
     caption = "*BETA FEATURE: still in progress*\n" + horaVen()
     bot.send_photo(chat_id=update.message.chat_id, photo=open('data/plot.png', 'rb'), caption=caption, parse_mode=ParseMode.MARKDOWN, reply_to_message_id=update.message.message_id)
-
-    # If len args is not 2 ej /plot or /plot dolar or /plot very long sentence
-def wrongInput(bot, update):
-    toPrint = "*Correct usage of /plot@trinbot is as follows:*\n\n" \
-              "`/plot@trinbot <arg1> <arg2>` where `<arg1>` can be either `dolartoday` or `localbtc` and `<arg2>`" \
-              " can be: `day`, `week`, `month`, `year` or `all`"
-    bot.send_message(chat_id=update.message.chat_id, text=toPrint, parse_mode=ParseMode.MARKDOWN,
-                     reply_to_message_id=update.message.message_id)
-
