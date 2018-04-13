@@ -1,11 +1,11 @@
-# commands
-import datetime
 # python libs
+import datetime
 import logging
 
 # telegram python api wrapper
 from telegram.ext import Updater, CommandHandler, InlineQueryHandler
 
+# commands
 from commands.Start import start
 from commands.carlos import carlos
 from commands.dolarBTC import dolarBTC

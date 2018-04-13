@@ -2,7 +2,7 @@ import datetime
 import os
 import time
 
-# Only avaible in UNIX
+# Only available in UNIX
 
 os.environ['TZ'] = 'America/Caracas'
 time.tzset()
