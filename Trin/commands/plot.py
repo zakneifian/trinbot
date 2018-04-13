@@ -101,6 +101,8 @@ def plot(bot, update, args):
         # Therefore 5*10^5
         # dt
         maxV = (math.ceil(max(vals) % 10) + 1) * 10 ** math.floor(math.log10(max(vals)))
+        print(max(vals))
+        print(maxV)
         # Value limits of axis y
         plt.ylim(minV, maxV)
     elif args[0] == "day":  # hourly plot
