@@ -100,9 +100,11 @@ def plot(bot, update, args):
         # EJ: 410543.45%10 is  4.1.... ceil it; 5. that times 10^: math.log10(410543.45) is 5.something. Floor it and you have 5; 10^5.
         # Therefore 5*10^5
         # dt
-        maxV = (math.ceil(max(vals) % 10) + 1) * 10 ** math.floor(math.log10(max(vals)))
-        print(max(vals))
-        print(maxV)
+        maxV = (int(str(max(vals))[0]) + 1) * 10 ** math.floor(math.log10(max(vals)))
+        #lbtc
+        maxVBTC = (int(str(dfBTC.LocalBitcoins.max())[0]) + 1) * 10 ** math.floor(math.log10(dfBTC.LocalBitcoins.max()))
+        #definitive
+        maxV = max(maxV, maxVBTC)
         # Value limits of axis y
         plt.ylim(minV, maxV)
     elif args[0] == "day":  # hourly plot
