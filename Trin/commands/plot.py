@@ -129,11 +129,20 @@ def plot(bot, update, args):
         tick.tick1line.set_markersize(2)
         tick.tick2line.set_markersize(2)
         tick.set_pad(4 * tick.get_pad())
+    # suptitle
+    fig.suptitle('VEF/USD value over time', fontsize=14, fontweight='bold')
+    # title
+    ax.set_title('As of {}. Updates at 12:00 a.m. VET'.format(horaVen()))
+    # Annotations
+    # DT
+    ax.annotate('BsF. {0:.2f}'.format(toPlotDT[-1]["DolarToday"]), xy=(datetimeVen() - datetime.timedelta(days=1), toPlotDT[-1]["DolarToday"]))
+    # LBTC
+    ax.annotate('BsF. {0:.2f}'.format(toPlotBTC[-1]["LocalBitcoins"]), xy=(datetimeVen() - datetime.timedelta(days=1), toPlotBTC[-1]["LocalBitcoins"]))
     #Saving plot
     plt.savefig("data/plot.png", dpi=300, orientation='landscape', bbox_inches='tight', pad_inches=0.01)
     #Ensure that the fig is closed
     plt.close(fig)
     #Inverting the photo
     #Sending it
-    caption = "*BETA FEATURE: still in progress*\n" + horaVen()
+    caption = "*BETA FEATURE: still in progress*\n"
     bot.send_photo(chat_id=update.message.chat_id, photo=open('data/plot.png', 'rb'), caption=caption, parse_mode=ParseMode.MARKDOWN, reply_to_message_id=update.message.message_id)

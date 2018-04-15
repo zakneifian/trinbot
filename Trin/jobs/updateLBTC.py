@@ -10,8 +10,6 @@ def updateLBTC(bot, job):
         DatePrice.append({"date": datetimeVen() - datetime.timedelta(days=1), "LocalBitcoins": getDollar('24')})
         SaveLoadObj.save_obj(DatePrice, "LBTClist")
     elif job.context == "1":
-        if timeVen().hour == 0:
-            hourly = []
-            SaveLoadObj.save_obj(hourly, "LBTChourly")
         hourly = SaveLoadObj.load_obj("LBTChourly")
         hourly.append({'date': timeVen(), "LocalBitcoins": getDollar('1')})
+        SaveLoadObj.save_obj(hourly, "LBTChourly")

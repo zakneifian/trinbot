@@ -6,7 +6,7 @@ dollarDic = {}
 # This function requests the json data from LocalBitcoins, calculates the rate between
 # USD and VEF and returns an array with the averages
 def calcDollar():
-    r = requests.get('https://localbitcoins.com//bitcoinaverage/ticker-all-currencies/').json()
+    r = requests.get('https://localbitcoins.com/bitcoinaverage/ticker-all-currencies/').json()
     USD = r["USD"]
     VEF = r["VEF"]
     avg_1h =  float(VEF["avg_1h"])  / float(USD["avg_1h"])
