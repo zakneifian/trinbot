@@ -10,6 +10,7 @@ import datetime
 from utils.VET import datetimeVen, horaVen
 from telegram import ParseMode
 import math
+from matplotlib.ticker import ScalarFormatter, FuncFormatter
 # import locale
 
 # locale.setlocale(locale.LC_ALL, 'es_ES.utf-8')
@@ -41,11 +42,13 @@ def plot(bot, update, args):
     fig, ax = plt.subplots()
 
     if args[0] == 'day':
-        xfmt = mdates.DateFormatter('%Y-%m-%d %H')
         datemin = datetimeVen() - datetime.timedelta(days=1)
         datemax = datetimeVen()
-        ax.xaxis.set_major_locator(hours)
-        ax.xaxis.set_major_formatter(xfmt)
+        ax.xaxis.set_major_locator(mdates.DayLocator())
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%d'))
+
+        ax.xaxis.set_minor_locator(mdates.HourLocator(byhour=range(0, 24, 3)))
+        ax.xaxis.set_minor_formatter(mdates.DateFormatter('%H'))
     elif args[0] == 'week':
         datemin = datetimeVen()- datetime.timedelta(days= 7)
         datemax = datetimeVen()
@@ -123,10 +126,16 @@ def plot(bot, update, args):
     #Format and tilt x axis dates
     fig.autofmt_xdate(which='both', rotation=50)
     # Reformatting y axis value ticks
-    #for axis in [ax.yaxis]:
-    #    axis.set_major_formatter(ScalarFormatter())
-    #    axis.set_minor_formatter(ScalarFormatter())
-    #ax.ticklabel_format(useOffset=False, style='plain', axis='y')
+    for axis in [ax.yaxis]:
+        formatter = ScalarFormatter()
+        formatter.set_scientific(False)
+        axis.set_major_formatter(formatter)
+        if args[0] not in ["year", "all"]:
+            axis.set_minor_formatter(formatter)
+        ax.get_yaxis().set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
+        if args[0] not in ["year", "all"]:
+            ax.get_yaxis().set_minor_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
+    #ax.ticklabel_format(useOffset=True)
     #Lower major formatter to not collide with the minor one
     for tick in ax.xaxis.get_major_ticks():
         tick.tick1line.set_markersize(2)
