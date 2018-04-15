@@ -130,7 +130,7 @@ def plot(bot, update, args):
         tick.tick2line.set_markersize(2)
         tick.set_pad(4 * tick.get_pad())
     # suptitle
-    fig.suptitle('VEF/USD value over time', fontsize=14, fontweight='bold')
+    fig.suptitle('VEF/USD value over time in log scale', fontsize=14, fontweight='bold')
     # title
     ax.set_title('As of {}. Updates at 12:00 a.m. VET'.format(horaVen()))
     # Annotations
