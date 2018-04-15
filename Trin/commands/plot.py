@@ -41,12 +41,11 @@ def plot(bot, update, args):
     fig, ax = plt.subplots()
 
     if args[0] == 'day':
-        xfmt = mdates.DateFormatter('%H')
+        xfmt = mdates.DateFormatter('%Y-%m-%d %H')
         datemin = datetimeVen() - datetime.timedelta(days=1)
         datemax = datetimeVen()
-        ax.xaxis.set_major_locator(days)
-        ax.xaxis.set_major_formatter(daysFmt)
-        ax.xaxis.set_minor_locator(xfmt)
+        ax.xaxis.set_major_locator(hours)
+        ax.xaxis.set_major_formatter(xfmt)
     elif args[0] == 'week':
         datemin = datetimeVen()- datetime.timedelta(days= 7)
         datemax = datetimeVen()
