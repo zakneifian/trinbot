@@ -135,9 +135,9 @@ def plot(bot, update, args):
     ax.set_title('As of {}. Updates at 12:00 a.m. VET'.format(horaVen()))
     # Annotations
     # DT
-    ax.annotate('BsF. {0:.2f}'.format(toPlotDT[-1]["DolarToday"]), xy=(datetimeVen() - datetime.timedelta(days=1), toPlotDT[-1]["DolarToday"]))
+    ax.annotate('    BsF. {0:.2f}'.format(toPlotDT[-1]["DolarToday"]), xy=(datetimeVen() - datetime.timedelta(days=1), toPlotDT[-1]["DolarToday"]))
     # LBTC
-    ax.annotate('BsF. {0:.2f}'.format(toPlotBTC[-1]["LocalBitcoins"]), xy=(datetimeVen() - datetime.timedelta(days=1), toPlotBTC[-1]["LocalBitcoins"]))
+    ax.annotate('    BsF. {0:.2f}'.format(toPlotBTC[-1]["LocalBitcoins"]), xy=(datetimeVen() - datetime.timedelta(days=1), toPlotBTC[-1]["LocalBitcoins"]))
     #Saving plot
     plt.savefig("data/plot.png", dpi=300, orientation='landscape', bbox_inches='tight', pad_inches=0.01)
     #Ensure that the fig is closed
