@@ -10,9 +10,9 @@ import datetime
 from utils.VET import datetimeVen, horaVen
 from telegram import ParseMode
 import math
-import locale
+# import locale
 
-locale.setlocale(locale.LC_ALL, 'es_ES.utf-8')
+# locale.setlocale(locale.LC_ALL, 'es_ES.utf-8')
 
 # Path of data to plot
 path = ""
@@ -41,11 +41,12 @@ def plot(bot, update, args):
     fig, ax = plt.subplots()
 
     if args[0] == 'day':
+        xfmt = mdates.DateFormatter('%H')
         datemin = datetimeVen() - datetime.timedelta(days=1)
         datemax = datetimeVen()
         ax.xaxis.set_major_locator(days)
         ax.xaxis.set_major_formatter(daysFmt)
-        ax.xaxis.set_minor_locator(hours)
+        ax.xaxis.set_minor_locator(xfmt)
     elif args[0] == 'week':
         datemin = datetimeVen()- datetime.timedelta(days= 7)
         datemax = datetimeVen()
@@ -138,9 +139,11 @@ def plot(bot, update, args):
     ax.set_title('As of {}. Updates at 12:00 a.m. VET'.format(horaVen()))
     # Annotations
     # DT
-    ax.annotate('    BsF. ' + locale.format('%.2f', toPlotDT[-1]["DolarToday"], 1), xy=(datetimeVen() - datetime.timedelta(days=1), toPlotDT[-1]["DolarToday"]))
+    # ax.annotate('    BsF. ' + locale.format('%.2f', toPlotDT[-1]["DolarToday"], 1), xy=(datetimeVen() - datetime.timedelta(days=1), toPlotDT[-1]["DolarToday"]))
+    ax.annotate('    BsF. {:,.2f}'.format(toPlotDT[-1]["DolarToday"]), xy=(datetimeVen() - datetime.timedelta(days=1), toPlotDT[-1]["DolarToday"]))
     # LBTC
-    ax.annotate('    BsF. ' + locale.format('%.2f', toPlotBTC[-1]["LocalBitcoins"], 1), xy=(datetimeVen() - datetime.timedelta(days=1), toPlotBTC[-1]["LocalBitcoins"]))
+    # ax.annotate('    BsF. ' + locale.format('%.2f', toPlotBTC[-1]["LocalBitcoins"], 1), xy=(datetimeVen() - datetime.timedelta(days=1), toPlotBTC[-1]["LocalBitcoins"]))
+    ax.annotate('    BsF. {:,.2f}'.format(toPlotBTC[-1]["LocalBitcoins"]), xy=(datetimeVen() - datetime.timedelta(days=1), toPlotBTC[-1]["LocalBitcoins"]))
     #Saving plot
     plt.savefig("data/plot.png", dpi=300, orientation='landscape', bbox_inches='tight', pad_inches=0.01)
     #Ensure that the fig is closed
